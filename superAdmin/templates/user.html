@@ -1,0 +1,359 @@
+
+{% extends "base.html" %}
+{%block content%}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-left">
+                <h1>Manage Users</h1>
+                <p>Manage user accounts, roles, and permissions across all shops</p>
+            </div>
+            <div class="top-right">
+                <a href="#add-user-modal" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Add New User
+                </a>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search users...">
+                </div>
+            </div>
+        </header>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+        <!-- User Statistics -->
+        <div class="user-stats">
+            <div class="stat-card">
+                <div class="stat-icon total-users">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Users</h3>
+                    <h2>45</h2>
+                    <p>Active: 42 | Inactive: 3</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon shop-admins">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Shop Admins</h3>
+                    <h2>25</h2>
+                    <p>Manage individual shops</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon cashiers">
+                    <i class="fas fa-cash-register"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Cashiers</h3>
+                    <h2>15</h3>
+                    <p>Handle billing operations</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon inventory-managers">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Inventory Managers</h3>
+                    <h2>5</h2>
+                    <p>Manage stock and inventory</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="users-container">
+            <div class="table-header">
+                <h3>All Users</h3>
+                <div class="table-actions">
+                    <select class="role-filter">
+                        <option value="all">All Roles</option>
+                        <option value="super_admin">Super Admin</option>
+                        <option value="shop_admin">Shop Admin</option>
+                        <option value="cashier">Cashier</option>
+                        <option value="inventory_manager">Inventory Manager</option>
+                    </select>
+                    <select class="status-filter">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Shop</th>
+                            <th>Email</th>
+                            <th>created</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Super Admin -->
+                         {%for user in users %}
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    {% comment %} <div class="user-avatar super-admin">SA</div> {% endcomment %}
+                                    <div class="user-details">
+                                        <h4>{{user.name}}</h4>
+                                        <p>ID: USER-{{user.id}}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="role-badge super-admin">{{user.role}}</span>
+                            </td>
+                            {%if user.role == 'super_admin'%}
+                            <td>All Shops</td>
+                            {%elif user.role == 'shop_admin'%}
+                            <td>{{user.shop_name}}</td>
+                            {%elif user.role == 'cashier'%}
+                            <td>{{user.shop_name}}</td>
+                            {%elif user.role == 'inventory_manager'%}
+                            <td>All Shops</td>
+                            {%endif%}
+
+                            <td>{{user.email}}</td>
+                            <td>{{user.created}}</td>
+                            <td><span class="status-badge active">{{user.status}}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-icon" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon" title="Reset Password"><i class="fas fa-key"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    
+                        
+                  
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn disabled">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <span class="page-dots">...</span>
+                <button class="page-btn">5</button>
+                <button class="page-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Role Permissions -->
+        <div class="permissions-section">
+            <h3>Role Permissions</h3>
+            <div class="permissions-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Permission</th>
+                            <th>Super Admin</th>
+                            <th>Shop Admin</th>
+                            <th>Cashier</th>
+                            <th>Inventory Manager</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>View Dashboard</td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Shops</td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Process Sales</td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Inventory</td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>View Reports</td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-check success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Users</td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>System Settings</td>
+                            <td><i class="fas fa-check success"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                            <td><i class="fas fa-times danger"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    <!-- Add User Modal -->
+    <div class="modal" id="add-user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <a href="#" class="close-modal">&times;</a>
+            </div>
+            <form method='POST' action="{%url 'super:user'%}">
+                 {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" name='userFirstName' required placeholder="Enter first name">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name *</label>
+                        <input type="text" name='userSecondName' required placeholder="Enter last name">
+                    </div>
+                </div> 
+                
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" name="userEmail" required placeholder="user@example.com">
+                </div>
+                
+                {% comment %} <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="userNum"  placeholder="+92 9876543210">
+                    </div>
+                    {% comment %} <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" value="USER-" placeholder="Auto-generated">
+                    </div>  
+                </div> {% endcomment %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Role *</label>
+                        <select  name="userRole" required>
+                            <option value="">Select role</option>
+                            <option value="super_admin">Super Admin</option>
+                            <option value="shop_admin">Shop Admin</option>
+                            <option value="cashier">Cashier</option>
+                            <option value="inventory_manager">Inventory Manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Assign to Shop</label>
+                        <select name='selectShop'>
+                            <option value="">Select shop (if applicable)</option>
+                            {% for shop in shops %}
+                                 <option value="{{ shop.0 }}">{{ shop.1 }}</option>
+                              {% empty %}
+                                 <option>No shops found</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Password *</label>
+                        <input type="password" name="userPassword" required placeholder="Enter password">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password *</label>
+                        <input type="password" name="userConPassword" required placeholder="Confirm password">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Status</label>
+                    <div class="radio-group">
+                        <label class="radio">
+                            <input type="radio" name="userStatus" value="active" checked>
+                            <span>Active</span>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="userStatus" value="inactive">
+                            <span>Inactive</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="#" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Create User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+        
+        // Simple modal close
+        document.querySelectorAll('.close-modal, .btn-secondary').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('add-user-modal').style.display = 'none';
+            });
+        });
+        
+        // Open modal when clicking add user
+        document.querySelectorAll('a[href="#add-user-modal"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('add-user-modal').style.display = 'flex';
+            });
+        });
+    </script>
+{%endblock%}

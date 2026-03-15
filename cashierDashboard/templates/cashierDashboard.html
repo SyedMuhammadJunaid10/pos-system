@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System - Cashier Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'css/dashboard.css'%}">
+</head>
+<body>
+    {%block content %}
+    <!-- Header -->
+    <header class="pos-header">
+        <div class="header-left">
+            <div class="shop-logo">
+                <i class="fas fa-store" style="font-size: 28px; color: #4fc3f7;"></i>
+            </div>
+            <div class="shop-info">
+                <h1>{{shopName}}</h1>
+                <p>Shop #203, Downtown Mall | 09:00 AM - 10:00 PM</p>
+            </div>
+        </div>
+        
+        <div class="cashier-info">
+            <div class="cashier-details">
+                <div class="cashier-name">{{cashierName}} (Cashier)</div>
+                <div class="cashier-shift">ID: CSH-001 | Shift: 09:00-17:00</div>
+            </div>
+            <div class="date-time" id="currentDateTime">
+                Loading...
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <div class="main-container">
+        <!-- Left Column: Scanner & Cart -->
+        <div class="left-column">
+            <!-- Barcode Scanner -->
+            <div class="dashboard-card scanner-section">
+                <div class="card-header">
+                    <i class="fas fa-barcode"></i>
+                    <h2>Barcode Scanner</h2>
+                </div>
+                
+                <div class="barcode-input-group">
+                    
+                    {% csrf_token %}
+                    <input type="hidden" name="csrfmiddlewaretoken" value="ABC123XYZ">
+
+                    <input type="text" 
+                           class="barcode-input" 
+                           id="barcodeInput"
+                           name='barcode'
+                           placeholder="Scan or enter barcode..."
+                           autocomplete="off">
+                    <button class="scan-btn" >
+                        <i class="fas fa-search"></i>
+                        Scan
+                    </button>
+                </div>
+                  {% comment %} <div id="scanner" style="width: 100%; margin-bottom: 10px;"></div> {% endcomment %}
+                
+                  <video id="scanner" style="width:300px;"></video>
+
+                  <div class="barcode-visual" id="">
+                    <div class="barcode-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <button class="barcode-hint" onclick="focusScanner()">
+                        Click to focus scanner or use barcode reader
+                        <br>
+                    </button> <br>
+                        <small>Press Enter after entering barcode</small>
+
+                </div>
+                <button class="barcode-hint" onclick="stopScanner()">
+                        stop scanner
+                    </button>
+            </div>
+            <button class="barcode-hint" onclick="stopScanner()">
+                        stop scanner
+                    </button>
+
+            <!-- Shopping Cart -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Shopping Cart</h2>
+                </div>
+                
+                <div class="cart-container">
+                    <div class="cart-items" id="cartItems">
+                        <!-- Cart items will appear here -->
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3>Your cart is empty</h3>
+                            <p>Scan products to add them to cart</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cart-actions">
+                    <div class="cart-summary">
+                        <span class="item-count" id="itemCount">0 items</span>
+                        <span class="cart-total">Total: <span id="cartTotal">RS0.00</span></span>
+                    </div>
+                    <button class="clear-btn" onclick="clearCart()">
+                        <i class="fas fa-trash"></i>
+                        Clear Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Product Details & Payment -->
+        <div class="right-column">
+            <!-- Product Details -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>Product Details</h2>
+                </div>
+                
+                <div class="product-display">
+                    <div class="product-icon" id="productIcon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3 id="productName">No Product Selected</h3>
+                </div>
+                
+                <div class="product-details-grid">
+                    <div class="detail-row">
+                        <span class="detail-label">Barcode:</span>
+                        <span class="detail-value" id="productBarcode">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Price:</span>
+                        <span class="detail-value" id="productPrice">RS0.00</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Stock Available:</span>
+                        <span class="detail-value">
+                            <span id="productStock">0</span>
+                            <span class="stock-badge stock-good" id="stockStatus">In Stock</span>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Tax Rate:</span>
+                        <span class="detail-value" id="productTax">0%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Category:</span>
+                        <span class="detail-value" id="productCategory">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Section -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <i class="fas fa-credit-card"></i>
+                    <h2>Payment</h2>
+                </div>
+                
+                <div class="payment-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotalAmount">RS0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (8%):</span>
+                        <span id="taxAmount">RS0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Discount:</span>
+                        <span id="discountAmount">RS0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>TOTAL:</span>
+                        <span id="totalAmount">RS0.00</span>
+                    </div>
+                </div>
+                
+                <div class="payment-methods">
+                    <h4 style="margin-bottom: 10px; color: #495057;">Select Payment Method:</h4>
+                    
+                    <div class="method-option selected" onclick="selectPaymentMethod(this, 'cash')">
+                        <div class="method-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="method-info">
+                            <h4>Cash</h4>
+                            <p>Pay with cash</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method-option" onclick="selectPaymentMethod(this, 'card')">
+                        <div class="method-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="method-info">
+                            <h4>Credit Card</h4>
+                            <p>Visa, MasterCard</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method-option" onclick="selectPaymentMethod(this, 'mobile')">
+                        <div class="method-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="method-info">
+                            <h4>Mobile Pay</h4>
+                            <p>Apple/Google Pay</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="pay-btn" onclick="processPayment()">
+                    <i class="fas fa-check-circle"></i>
+                    PROCESS PAYMENT
+                </button>
+
+                <!-- Receipt Preview (hidden by default) -->
+                <div class="receipt-preview" id="receiptPreview">
+                    <div class="receipt-header">
+                        <h4 style="margin: 0;">MegaMart Superstore</h4>
+                        <p style="margin: 2px 0; font-size: 10px;">Shop #203, Downtown Mall</p>
+                        <p style="margin: 2px 0; font-size: 10px;" id="receiptDate">Date: Loading...</p>
+                        <p style="margin: 2px 0; font-size: 10px;" id="receiptInvoice">INV-001</p>
+                    </div>
+                    <div id="receiptItems">
+                        <!-- Receipt items will be added here -->
+                    </div>
+                    <div class="receipt-footer">
+                        <p style="margin: 2px 0;">Thank you for shopping!</p>
+                        <p style="margin: 2px 0; font-size: 10px;">Cashier: John Smith</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  ZXing -->
+<script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
+    <!-- Minimal JavaScript -->
+    <script src="{%static 'dashboard.js'%}">
+
+    </script>
+</body>
+</html>
+{%endblock%}

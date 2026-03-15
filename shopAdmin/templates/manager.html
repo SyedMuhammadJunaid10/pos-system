@@ -1,0 +1,277 @@
+{% extends "shop_base.html" %}
+{% block content %}
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1>Manager Management</h1>
+                    <p>Assign and manage shop managers</p>
+                </div>
+                <div class="top-actions">
+                    <button class="btn btn-primary" onclick="openAddManagerModal()">
+                        <i class="fas fa-user-plus"></i> Add Manager
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="dashboard-content">
+                <!-- Manager Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Total Managers</span>
+                            <div class="stat-icon customers">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Active: 3</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Tasks Assigned</span>
+                            <div class="stat-icon inventory">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8 completed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Managers Table -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-users"></i> All Managers</h3>
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search managers..." id="searchManagers">
+                        </div>
+                    </div>
+                    <div class="products-table-container">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Manager</th>
+                                    <th>Role</th>
+                                    <th>Assigned Tasks</th>
+                                    <th>Reports Generated</th>
+                                    <th>Performance</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-img">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div>
+                                                <div class="product-name">Sarah Johnson</div>
+                                                <div class="product-sku">sarah@shop.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Inventory Manager</td>
+                                    <td>
+                                        <div class="stock-cell">
+                                            <div class="stock-bar">
+                                                <div class="stock-level-bar" style="width: 80%"></div>
+                                            </div>
+                                            <span class="stock-text">8/10</span>
+                                        </div>
+                                    </td>
+                                    <td>12 reports</td>
+                                    <td>4.5/5</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn-icon" onclick="assignTask('Sarah Johnson')">
+                                                <i class="fas fa-tasks"></i>
+                                            </button>
+                                            <button class="btn-icon" onclick="viewReports('Sarah Johnson')">
+                                                <i class="fas fa-chart-bar"></i>
+                                            </button>
+                                            <button class="btn-icon" onclick="editManager('Sarah Johnson')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-img">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div>
+                                                <div class="product-name">Mike Chen</div>
+                                                <div class="product-sku">mike@shop.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Sales Manager</td>
+                                    <td>
+                                        <div class="stock-cell">
+                                            <div class="stock-bar">
+                                                <div class="stock-level-bar" style="width: 62%"></div>
+                                            </div>
+                                            <span class="stock-text">5/8</span>
+                                        </div>
+                                    </td>
+                                    <td>8 reports</td>
+                                    <td>4.2/5</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn-icon">
+                                                <i class="fas fa-tasks"></i>
+                                            </button>
+                                            <button class="btn-icon">
+                                                <i class="fas fa-chart-bar"></i>
+                                            </button>
+                                            <button class="btn-icon">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Add Manager Modal -->
+    <div class="modal-overlay" id="addManagerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Add New Manager</h2>
+                <button class="close-modal" onclick="closeAddManagerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="managerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <select class="form-input" required>
+                                <option value="">Select Role</option>
+                                <option>Inventory Manager</option>
+                                <option>Sales Manager</option>
+                                <option>Operations Manager</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Shop</label>
+                            <select class="form-input">
+                                <option>Electro World (Main)</option>
+                                <option>Westgate Branch</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Permissions</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" checked>
+                                <span>Manage Inventory</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" checked>
+                                <span>Generate Reports</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox">
+                                <span>Manage Staff</span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddManagerModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="addManager()">Add Manager</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.admin-sidebar').classList.toggle('active');
+        }
+
+        function openAddManagerModal() {
+            document.getElementById('addManagerModal').classList.add('active');
+        }
+
+        function closeAddManagerModal() {
+            document.getElementById('addManagerModal').classList.remove('active');
+        }
+
+        function addManager() {
+            alert('Manager added successfully!');
+            closeAddManagerModal();
+            document.getElementById('managerForm').reset();
+        }
+
+        function assignTask(manager) {
+            alert('Assign task to ' + manager);
+        }
+
+        function viewReports(manager) {
+            alert('View reports for ' + manager);
+        }
+
+        function editManager(manager) {
+            alert('Edit ' + manager);
+        }
+
+        // Search functionality
+        document.getElementById('searchManagers').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.products-table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('addManagerModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddManagerModal();
+            }
+        });
+    </script>
+{%endblock%}

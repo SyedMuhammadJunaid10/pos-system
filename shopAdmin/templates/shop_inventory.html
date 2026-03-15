@@ -1,0 +1,348 @@
+{%extends 'shop_base.html'%}
+{%block content%}
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1>Inventory Management</h1>
+                    <p>Track and manage your stock levels</p>
+                </div>
+                <div class="top-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search inventory..." id="searchInventory">
+                    </div>
+                    <button class="btn btn-primary" onclick="openBulkRestockModal()">
+                        <i class="fas fa-plus"></i> Bulk Restock
+                    </button>
+                </div>
+            </div>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+            <!-- Inventory Content -->
+            <div class="dashboard-content">
+                <!-- Inventory Stats -->
+                <div class="inventory-stats">
+                    <div class="inventory-stat-card">
+                        <div class="stat-icon-circle total">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-value">{{totalProduct}}</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+
+                    <div class="inventory-stat-card">
+                        <div class="stat-icon-circle low">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-value">{{lowStock}}</div>
+                        <div class="stat-label">Low Stock Items</div>
+                    </div>
+
+                    <div class="inventory-stat-card">
+                        <div class="stat-icon-circle critical">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-value">{{outStock}}</div>
+                        <div class="stat-label">Out of Stock</div>
+                    </div>
+
+                    <div class="inventory-stat-card">
+                        <div class="stat-icon-circle value">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="stat-value">RS{{inventoryValue}}</div>
+                        <div class="stat-label">Inventory Value</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="inventory-actions">
+                    <button class="btn btn-secondary" onclick="exportInventory()">
+                        <i class="fas fa-file-export"></i> Export Inventory
+                    </button>
+                    <button class="btn btn-secondary" onclick="printBarcodeLabels()">
+                        <i class="fas fa-barcode"></i> Print Barcodes
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewInventoryReport()">
+                        <i class="fas fa-chart-pie"></i> View Report
+                    </button>
+                    <button class="btn btn-success" onclick="assignLowStockToManager()">
+                        <i class="fas fa-user-tie"></i> Assign to Manager
+                    </button>
+                </div>
+
+                <!-- Low Stock Alerts -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Low Stock Alerts</h3>
+                        
+                    </div>
+                    <div class="products-table-container">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Current Stock</th>
+                                    <th>Minimum Required</th>
+                                    <th>Reorder Level</th>
+                                    <th>Last Updated</th>
+                                    <th>Assigned Manager</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%for lowStock in lowStocks %}
+                                <tr class="low-stock-row">
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-image">
+                                                <i class="fas fa-headphones"></i>
+                                            </div>
+                                            <div>
+                                                <div class="product-name">{{lowStock.name}}</div>
+                                                <div class="product-sku">SKU-{{lowStock.id}}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="stock-text critical">{{lowStock.stock}}</span></td>
+                                    <td>50</td>
+                                    <td>10</td>
+                                    <td>2 hours ago</td>
+                                    <td>Sarah Johnson</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" onclick="restockItem('Wireless Headphones')">
+                                            Restock
+                                        </button>
+                                    </td>
+                                </tr>
+                                {%empty%}
+                                   <tr>
+                                    <td>
+                                        Stock is full
+                                   </td>
+                                </tr>
+                                {% endfor %}
+                              
+
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Stock Movements -->
+                <div class="stock-movement">
+                    <h3 style="margin-bottom: 15px;">Recent Stock Movements</h3>
+                    <div class="movement-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">Wireless Headphones restocked</div>
+                            <div style="font-size: 14px; color: var(--gray-600);">
+                                By: Sarah Johnson • 2 hours ago
+                            </div>
+                        </div>
+                        <div>
+                            <span class="movement-type movement-in">+50 units</span>
+                        </div>
+                    </div>
+
+                    <div class="movement-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">Smartphone X1 sold</div>
+                            <div style="font-size: 14px; color: var(--gray-600);">
+                                POS Counter • 4 hours ago
+                            </div>
+                        </div>
+                        <div>
+                            <span class="movement-type movement-out">-2 units</span>
+                        </div>
+                    </div>
+
+                    <div class="movement-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">Tablet Pro 12 returned</div>
+                            <div style="font-size: 14px; color: var(--gray-600);">
+                                Customer Return • 6 hours ago
+                            </div>
+                        </div>
+                        <div>
+                            <span class="movement-type movement-in">+1 unit</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Restock Modal -->
+    <div class="modal-overlay" id="restockModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Restock Product</h2>
+                <button class="close-modal" onclick="closeRestockModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="restockForm" method='POST' action="{%url 'shops:restock_product'%}">
+                     {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label">Product</label>
+                        <select class="form-input" required name="productName">
+                            <option value="">Select Product</option>
+                        {%for product in products%}
+                            <option value="{{product.0}}">{{product.1}}</option>
+                    {%endfor%}
+                            
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Quantity to Add *</label>
+                            <input type="number" name='quantity' class="form-input" placeholder="0" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Supplier</label>
+                            <input type="text" name='supplierName' class="form-input" placeholder="Supplier name (optional)">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Unit Cost (RS)</label>
+                            <input type="number" name='costPrice' class="form-input" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Assign to Manager</label>
+                            <select class="form-input" name='managerName'>
+                                <option>Select Manager</option>
+                                <option>Sarah Johnson</option>
+                                <option>Mike Chen</option>
+                                <option>David Lee</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-input" rows="2" name='description' placeholder="Additional notes..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRestockModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitRestock()">Submit Restock</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.admin-sidebar').classList.toggle('active');
+        }
+
+        function openBulkRestockModal() {
+            document.getElementById('restockModal').classList.add('active');
+        }
+
+        function closeRestockModal() {
+            document.getElementById('restockModal').classList.remove('active');
+        }
+
+        function restockItem(productName) {
+            alert('Restocking: ' + productName);
+            openBulkRestockModal();
+        }
+
+        function submitRestock() {
+            alert('Restock order submitted successfully!');
+            closeRestockModal();
+            document.getElementById('restockForm').submit();
+        }
+
+        function exportInventory() {
+            alert('Exporting inventory data...');
+        }
+
+        function printBarcodeLabels() {
+            alert('Printing barcode labels...');
+        }
+
+        function viewInventoryReport() {
+            alert('Opening inventory report...');
+        }
+
+        function assignLowStockToManager() {
+            if (confirm('Assign all low stock items to managers?')) {
+                alert('All low stock items assigned to managers');
+            }
+        }
+
+        function restockAllLowStock() {
+            if (confirm('Restock all low stock items?')) {
+                alert('Restocking all low stock items...');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInventory').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.products-table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('restockModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRestockModal();
+            }
+        });
+
+        // Add CSS for low stock rows
+        const style = document.createElement('style');
+        style.textContent = `
+            .low-stock-row {
+                background: rgba(245, 158, 11, 0.05);
+            }
+            
+            .low-stock-row:hover {
+                background: rgba(245, 158, 11, 0.1);
+            }
+            
+            .stock-text {
+                font-weight: 600;
+            }
+            
+            .stock-text.critical {
+                color: var(--danger);
+            }
+            
+            .stock-text.low {
+                color: var(--warning);
+            }
+            
+            .btn-sm {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+{%endblock%}

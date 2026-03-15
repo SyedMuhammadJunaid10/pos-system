@@ -1,0 +1,223 @@
+{% extends "shop_base.html" %}
+{% block content %}
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1>Shop Admin Dashboard</h1>
+                    <p>Welcome back, Shop Admin. Manage your store efficiently.</p>
+                </div>
+                <div class="top-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search products, orders...">
+                    </div>
+                    <button class="action-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Overview -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Today's Revenue</span>
+                            <div class="stat-icon revenue">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">RS{{revenue}}</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12.5% from yesterday</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Today's Orders</span>
+                            <div class="stat-icon orders">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{total_order}}</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8.2% from yesterday</span>
+                        </div>
+                    </div>
+
+                  
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Low Stock Items</span>
+                            <div class="stat-icon inventory">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{lowStock}}</div>
+                        <div class="stat-trend trend-down">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>3 items need attention</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Sections -->
+                <div class="dashboard-sections">
+                    <!-- Recent Sales -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-receipt"></i> Recent Sales</h3>
+                            <a href="{%url 'shops:shop_sales'%}" class="view-all-link">View All</a>
+                        </div>
+                        <div class="recent-sales">
+                            {%for s in recent_sale%}
+                            <div class="sale-item">
+                                <div class="sale-icon">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                                <div class="sale-info">
+                                    <div class="sale-id">#ORD-{{s.id}}</div>
+                                    {% comment %} <div class="sale-customer">John Smith • 3 items</div> {% endcomment %}
+                                </div>
+                                <div class="sale-amount">RS{{s.totalAmount}}</div>
+                                <div class="sale-time">{{s.time}}</div>
+                                <div class="sale-status status-completed">Completed</div>
+                            </div>
+                            {% endfor %}
+                           
+
+                           
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Low Stock Alerts</h3>
+                            <a href="{% url 'shops:shop_inventory'%}" class="view-all-link">Manage</a>
+                        </div>
+                        <div class="low-stock-alerts">
+                            {%for alert in AlertStock%}
+                            <div class="alert-item {%if alert.level == 'critical'%}critical {% endif %}">
+                                <div class="product-icon-small">
+                                    <i class="fas fa-headphones"></i>
+                                </div>
+                                <div class="alert-info">
+                                    <div class="product-name">{{alert.name}}</div>
+                                    <div class="stock-level">Stock: {{alert.stock}} | Min: 50</div>
+                                </div>
+                                <button class="restock-btn">Restock</button>
+                            </div>
+                            {% comment %} <div class="alert-item">
+                                <div class="product-icon-small">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="alert-info">
+                                    <div class="product-name">{{alert.name}}</div>
+                                    <div class="stock-level">Stock: {{alert.stock}} | Min: 100</div>
+                                </div>
+                                <button class="restock-btn">Restock</button>
+                            </div> {% endcomment %}
+                            {%endfor%}
+                          
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <a href="{%url 'shops:shop_product'%}" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="action-title">Add Product</div>
+                            <div class="action-desc">Add new product to catalog</div>
+                        </a>
+
+                        <a href="{%url 'shops:shop_sales'%}" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-cash-register"></i>
+                            </div>
+                            <div class="action-title">New Sale</div>
+                            <div class="action-desc">Process customer sale</div>
+                        </a>
+
+                        <a href="{%url 'shops:shop_manager'%}" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="action-title">Assign Manager</div>
+                            <div class="action-desc">Assign tasks to manager</div>
+                        </a>
+
+                        <a href="{%url 'shops:shop_report'%}" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-file-export"></i>
+                            </div>
+                            <div class="action-title">Generate Report</div>
+                            <div class="action-desc">Create sales report</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+     
+    </div>
+
+    <!-- Minimal JS -->
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.admin-sidebar').classList.toggle('active');
+        }
+
+        function toggleShopStatus() {
+            const btn = document.querySelector('.toggle-shop-btn');
+            const statusDot = document.querySelector('.status-dot');
+            const statusText = document.querySelector('.status-text strong');
+            
+            if (btn.classList.contains('closed')) {
+                // Open shop
+                btn.classList.remove('closed');
+                btn.innerHTML = '<i class="fas fa-power-off"></i> Close Shop';
+                statusDot.classList.remove('closed');
+                statusText.textContent = 'Open';
+                statusText.parentElement.classList.remove('closed');
+            } else {
+                // Close shop
+                btn.classList.add('closed');
+                btn.innerHTML = '<i class="fas fa-power-on"></i> Open Shop';
+                statusDot.classList.add('closed');
+                statusText.textContent = 'Closed';
+                statusText.parentElement.classList.add('closed');
+            }
+        }
+
+        // Initialize
+        document.querySelector('.toggle-shop-btn').onclick = toggleShopStatus;
+        
+        // Close sidebar on mobile when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.admin-sidebar');
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            
+            if (window.innerWidth <= 1024 && 
+                !sidebar.contains(event.target) && 
+                !mobileToggle.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+
+    {% endblock%}

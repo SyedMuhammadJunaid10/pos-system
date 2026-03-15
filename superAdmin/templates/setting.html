@@ -1,0 +1,476 @@
+{% extends "base.html" %}
+{%block content%}
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-left">
+                <h1>System Settings</h1>
+                <p>Configure mall POS system settings and preferences</p>
+            </div>
+            <div class="top-right">
+                <div class="system-status">
+                    <div class="status-indicator active"></div>
+                    <span>System Online</span>
+                </div>
+                <div class="date-display">
+                    <i class="fas fa-calendar"></i>
+                    <span>Dec 25, 2024</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Settings Tabs -->
+        <div class="settings-container">
+            <div class="settings-tabs">
+                <button class="tab-btn active" data-tab="general">General Settings</button>
+                <button class="tab-btn" data-tab="billing">Billing & Tax</button>
+                <button class="tab-btn" data-tab="notifications">Notifications</button>
+                <button class="tab-btn" data-tab="security">Security</button>
+                <button class="tab-btn" data-tab="backup">Backup & Restore</button>
+            </div>
+
+            <!-- General Settings -->
+            <div class="tab-content active" id="general">
+                <div class="settings-card">
+                    <h3><i class="fas fa-store"></i> Mall Information</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Mall Name</label>
+                            <input type="text" value="Grand City Mall" placeholder="Enter mall name">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Contact Email</label>
+                                <input type="email" value="admin@grandcitymall.com" placeholder="Enter contact email">
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Phone</label>
+                                <input type="tel" value="+91 9876543210" placeholder="Enter contact phone">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea rows="3" placeholder="Enter mall address">123 Mall Street, Business District, City - 560001</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select>
+                                <option value="INR" selected>Indian Rupee (₹)</option>
+                                <option value="USD">US Dollar ($)</option>
+                                <option value="EUR">Euro (€)</option>
+                                <option value="GBP">British Pound (£)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Time Zone</label>
+                            <select>
+                                <option value="IST" selected>India Standard Time (IST)</option>
+                                <option value="UTC">UTC</option>
+                                <option value="EST">Eastern Time</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="settings-card">
+                    <h3><i class="fas fa-clock"></i> Operating Hours</h3>
+                    <div class="hours-grid">
+                        <div class="day-hours">
+                            <span class="day">Monday</span>
+                            <span class="time">10:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="day-hours">
+                            <span class="day">Tuesday</span>
+                            <span class="time">10:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="day-hours">
+                            <span class="day">Wednesday</span>
+                            <span class="time">10:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="day-hours">
+                            <span class="day">Thursday</span>
+                            <span class="time">10:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="day-hours">
+                            <span class="day">Friday</span>
+                            <span class="time">10:00 AM - 11:00 PM</span>
+                        </div>
+                        <div class="day-hours">
+                            <span class="day">Saturday</span>
+                            <span class="time">9:00 AM - 11:00 PM</span>
+                        </div>
+                        <div class="day-hours">
+                            <span class="day">Sunday</span>
+                            <span class="time">9:00 AM - 10:00 PM</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" style="margin-top: 20px;">
+                        <i class="fas fa-edit"></i> Edit Hours
+                    </button>
+                </div>
+            </div>
+
+            <!-- Billing & Tax Settings -->
+            <div class="tab-content" id="billing">
+                <div class="settings-card">
+                    <h3><i class="fas fa-percentage"></i> Tax Settings</h3>
+                    <div class="tax-rates">
+                        <div class="tax-item">
+                            <div class="tax-info">
+                                <h4>GST (Goods & Services Tax)</h4>
+                                <p>Applied to all products and services</p>
+                            </div>
+                            <div class="tax-rate">18%</div>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="tax-item">
+                            <div class="tax-info">
+                                <h4>SGST (State GST)</h4>
+                                <p>State level tax</p>
+                            </div>
+                            <div class="tax-rate">9%</div>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="tax-item">
+                            <div class="tax-info">
+                                <h4>CGST (Central GST)</h4>
+                                <p>Central level tax</p>
+                            </div>
+                            <div class="tax-rate">9%</div>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-card">
+                    <h3><i class="fas fa-receipt"></i> Invoice Settings</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Invoice Prefix</label>
+                            <input type="text" value="INV-" placeholder="Invoice prefix">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Invoice Number Format</label>
+                            <select>
+                                <option value="sequential" selected>Sequential (INV-0001)</option>
+                                <option value="date">Date-based (INV-20241225-001)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Invoice Footer Text</label>
+                            <textarea rows="2" placeholder="Enter footer text">Thank you for shopping with us!</textarea>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="autoPrint" checked>
+                            <label for="autoPrint">Auto-print invoice after sale</label>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="emailReceipt">
+                            <label for="emailReceipt">Email receipt to customer</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Invoice Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="tab-content" id="notifications">
+                <div class="settings-card">
+                    <h3><i class="fas fa-bell"></i> Notification Preferences</h3>
+                    <div class="notification-settings">
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h4>Low Stock Alerts</h4>
+                                <p>Get notified when product stock is low</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h4>Daily Sales Report</h4>
+                                <p>Receive daily sales summary via email</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h4>New User Registration</h4>
+                                <p>Notify when new users are registered</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h4>System Maintenance</h4>
+                                <p>Receive system maintenance alerts</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h4>Payment Failed</h4>
+                                <p>Get alerts for failed transactions</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-card">
+                    <h3><i class="fas fa-envelope"></i> Email Settings</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>SMTP Server</label>
+                            <input type="text" value="smtp.gmail.com" placeholder="SMTP server address">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>SMTP Port</label>
+                                <input type="number" value="587" placeholder="Port number">
+                            </div>
+                            <div class="form-group">
+                                <label>Email From</label>
+                                <input type="email" value="noreply@grandcitymall.com" placeholder="Sender email">
+                            </div>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="emailSSL" checked>
+                            <label for="emailSSL">Use SSL/TLS</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary">Test Email</button>
+                            <button type="submit" class="btn btn-primary">Save Email Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="tab-content" id="security">
+                <div class="settings-card">
+                    <h3><i class="fas fa-shield-alt"></i> Security Settings</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Session Timeout (minutes)</label>
+                            <input type="number" value="30" min="5" max="120">
+                            <p class="help-text">User session will expire after this time</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Max Login Attempts</label>
+                            <input type="number" value="5" min="3" max="10">
+                            <p class="help-text">Account locks after failed attempts</p>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="twoFactor" checked>
+                            <label for="twoFactor">Enable Two-Factor Authentication for admins</label>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="passwordExpiry">
+                            <label for="passwordExpiry">Enable password expiry (90 days)</label>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="ipWhitelist">
+                            <label for="ipWhitelist">Enable IP whitelisting</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Update Security Settings</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="settings-card">
+                    <h3><i class="fas fa-history"></i> Audit Log</h3>
+                    <div class="audit-log">
+                        <div class="log-item">
+                            <div class="log-icon success">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="log-content">
+                                <h4>User login successful</h4>
+                                <p>Super Admin logged in from IP: 192.168.1.100</p>
+                                <span class="log-time">2 minutes ago</span>
+                            </div>
+                        </div>
+                        
+                        <div class="log-item">
+                            <div class="log-icon warning">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div class="log-content">
+                                <h4>Shop settings updated</h4>
+                                <p>Electro World shop details were modified</p>
+                                <span class="log-time">1 hour ago</span>
+                            </div>
+                        </div>
+                        
+                        <div class="log-item">
+                            <div class="log-icon info">
+                                <i class="fas fa-file-export"></i>
+                            </div>
+                            <div class="log-content">
+                                <h4>Report exported</h4>
+                                <p>Daily sales report was exported to PDF</p>
+                                <span class="log-time">3 hours ago</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="view-all-logs">View All Audit Logs <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup & Restore -->
+            <div class="tab-content" id="backup">
+                <div class="settings-card">
+                    <h3><i class="fas fa-database"></i> Database Backup</h3>
+                    <div class="backup-info">
+                        <div class="backup-stats">
+                            <div class="stat">
+                                <h4>Last Backup</h4>
+                                <p>Dec 24, 2024 23:00</p>
+                            </div>
+                            <div class="stat">
+                                <h4>Backup Size</h4>
+                                <p>245 MB</p>
+                            </div>
+                            <div class="stat">
+                                <h4>Next Backup</h4>
+                                <p>Today, 23:00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="backup-actions">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-sync"></i> Backup Now
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Download Latest Backup
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="backup-schedule">
+                        <h4>Backup Schedule</h4>
+                        <div class="schedule-options">
+                            <label class="radio">
+                                <input type="radio" name="schedule" checked>
+                                <span>Daily</span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="schedule">
+                                <span>Weekly</span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="schedule">
+                                <span>Monthly</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Backup Time</label>
+                            <input type="time" value="23:00">
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="autoBackup" checked>
+                            <label for="autoBackup">Enable automatic backups</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-card">
+                    <h3><i class="fas fa-redo"></i> Restore Data</h3>
+                    <div class="restore-zone">
+                        <div class="restore-icon">
+                            <i class="fas fa-file-upload"></i>
+                        </div>
+                        <h4>Upload Backup File</h4>
+                        <p>Upload a .sql or .backup file to restore database</p>
+                        <input type="file" id="backupFile" accept=".sql,.backup" style="display: none;">
+                        <label for="backupFile" class="btn btn-secondary">
+                            <i class="fas fa-folder-open"></i> Choose File
+                        </label>
+                        <p class="warning-text">
+                            <i class="fas fa-exclamation-triangle"></i> Warning: Restoring will overwrite current data
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+        
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+{%endblock%}

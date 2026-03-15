@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{%block content%}
+
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-left">
+                <h1>Manage Shops</h1>
+                <p>Add, edit, and manage all shops in the mall</p>
+            </div>
+            <div class="top-right">
+                <a href="#add-shop-modal" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add New Shop
+                </a>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search shops...">
+                </div>
+            </div>
+        </header>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+        <!-- Shops Grid -->
+        <div class="shops-container">
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Filter by:</label>
+                    <select>
+                        <option value="all">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="grocery">Grocery</option>
+                        <option value="food">Food & Beverage</option>
+                    </select>
+                    <select>
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                {% comment %} <div class="total-shops">
+                    <span>{{shop|length}}</span> Shops Found
+                </div> {% endcomment %}
+            </div>
+
+            <div class="shops-grid">
+                <!-- Shop Card 1 -->
+                 {%for shop in shopDetails%}
+                <div class="shop-card">
+                    <div class="shop-header">
+                        <div>
+                            <span class="shop-category electronics">{{shop.9}}</span>
+                            <div class="shop-status status-active">
+                                <i class="fas fa-circle"></i> {{shop.3}}
+                            </div>
+                        </div>
+                        <span class="shop-code">{{shop.2}}</span>
+                    </div>
+                    
+                    <h3 class="shop-name">{{shop.1}}</h3>
+                    
+                    <div class="shop-location">
+                        <i class="fas fa-map-marker-alt"></i> {{shop.7}}
+                    </div>
+                    
+                    <div class="shop-owner">
+                        <i class="fas fa-user"></i> {{shop.5}}
+                    </div>
+                    
+                    <div class="shop-metrics">
+                        <div class="metric">
+                            <div class="metric-value">RS 2,45,000</div>
+                            <div class="metric-label">Revenue</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">1,245</div>
+                            <div class="metric-label">Orders</div>
+                        </div>
+                    </div>
+                    
+                    <div class="shop-actions">
+                        <a href="" class="btn-icon" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{%url 'super:delete_shop' shop.0 %}" class="btn-icon" title="Delete" onclick="return confirm('Are you sure you want to delete shop?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        <a href="" class="btn-icon" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+                {%endfor%}
+               
+
+                <!-- Add more shop cards as needed -->
+                <div class="shop-card add-shop-card">
+                    <a href="#add-shop-modal" class="add-shop-link">
+                        <div class="add-shop-content">
+                            <i class="fas fa-plus-circle"></i>
+                            <h3>Add New Shop</h3>
+                            <p>Click to add a new shop to the mall</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2024 Mall POS System | Shop Management</p>
+        </footer>
+    </main>
+
+    <!-- Add Shop Modal -->
+    <div class="modal" id="add-shop-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Shop</h2>
+                <a href="#" class="close-modal">&times;</a>
+            </div>
+            <form method='POST' action="{%url 'super:add_shop'%}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Shop Name *</label>
+                    <input type="text" name="shopName" required placeholder="Enter shop name">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Shop Category *</label>
+                        <select name='shopCategory' required>
+                            <option value="">Select category</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="clothing">Clothing & Fashion</option>
+                            <option value="grocery">Grocery & Supermarket</option>
+                            <option value="food">Food & Beverage</option>
+                            <option value="beauty">Beauty & Cosmetics</option>
+                            <option value="home">Home & Living</option>
+                            <option value="sports">Sports & Fitness</option>
+                            {% comment %} <option value="other">Other</option> {% endcomment %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Shop Code *</label>
+                        <input type="text" name='shopCode' required placeholder="SHOP-001">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Shop Owner Name</label>
+                    <input type="text" name='shopOwner' placeholder="Enter owner name">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Contact Number *</label>
+                        <input type="tel" name='mobileNum' required placeholder="+91 98765 43210">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name='email'  placeholder="shop@example.com">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Shop Location (Floor/Unit)</label>
+                    <input type="text" name='shopLocation' placeholder="Ground Floor, Unit 12">
+                </div>
+                
+                <div class="form-group">
+                    <label>Status</label>
+                    <div class="radio-group">
+                        <label class="radio">
+                            <input type="radio" name="status" value="active" checked>
+                            <span>Active</span>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="status" value="inactive">
+                            <span>Inactive</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="#" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Shop
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+  
+
+    <script>
+        // Simple mobile menu toggle only
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+        
+        // Simple modal close
+        document.querySelectorAll('.close-modal, .btn-secondary').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('add-shop-modal').style.display = 'none';
+            });
+        });
+        
+        // Open modal when clicking add shop
+        document.querySelectorAll('a[href="#add-shop-modal"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('add-shop-modal').style.display = 'flex';
+            });
+        });
+    </script>
+{%endblock%}

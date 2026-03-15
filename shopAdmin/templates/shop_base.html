@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shops Admin Dashboard - POS System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   {% load static %}
+    <link rel="stylesheet" href="{%static 'css/shopStyle.css'%}">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="shop-brand">
+                    <div class="shop-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="shop-info">
+                        <h2>{{shopname}}</h2>
+                        <span class="role-badge">shop Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <h3>Main</h3>
+                    <a href="{% url 'shops:shop_dashboard' %}" class="nav-link active">
+                        <i class="fas fa-tachometer-alt nav-icon"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    
+                </div>
+
+                <div class="nav-group">
+                    <h3>Management</h3>
+                    <a href="{%url 'shops:shop_product'%}" class="nav-link">
+                        <i class="fas fa-box nav-icon"></i>
+                        <span class="nav-text">Products</span>
+                    </a>
+                    <a href="{%url 'shops:shop_inventory'%}" class="nav-link">
+                        <i class="fas fa-warehouse nav-icon"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                    <a href="{%url 'shops:shop_sales'%}" class="nav-link">
+                        <i class="fas fa-shopping-cart nav-icon"></i>
+                        <span class="nav-text">Sales</span>
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <h3>Managers & Staff</h3>
+                    <a href="{% url 'shops:shop_manager'%}" class="nav-link">
+                        <i class="fas fa-user-tie nav-icon"></i>
+                        <span class="nav-text">Managers</span>
+                    </a>
+                   
+                </div>
+
+                <div class="nav-group">
+                    <h3>Reports</h3>
+                    <a href="{%url 'shops:shop_report'%}" class="nav-link">
+                        <i class="fas fa-chart-bar nav-icon"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                 
+                </div>
+
+                {% comment %} <div class="nav-group">
+                    <h3>Settings</h3>
+                    <a href="settings.html" class="nav-link">
+                        <i class="fas fa-cog nav-icon"></i>
+                        <span class="nav-text">shop Settings</span>
+                    </a>
+                </div> {% endcomment %}
+            </nav>
+
+            <div class="shop-status-card">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <div class="status-text">
+                        shop Status: <strong>Open</strong>
+                    </div>
+                </div>
+                <a href="{%url 'shops:logout'%}" class="toggle-shops-btn">
+                    <i class="fas fa-power-off"></i> Close shop
+                </a>
+            </div>
+        </aside>
+    {% block content %}
+       <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    {% endblock  %}
+
+</body>
+</html>

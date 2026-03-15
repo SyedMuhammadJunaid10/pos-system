@@ -1,0 +1,386 @@
+{% extends "shop_base.html" %}
+{% block content %}
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1>Sales Management</h1>
+                    <p>Track and manage all sales transactions</p>
+                </div>
+                <div class="top-actions">
+                    <button class="btn btn-primary" onclick="startNewSale()">
+                        <i class="fas fa-plus-circle"></i> New Sale
+                    </button>
+                </div>
+            </div>
+
+          
+
+                <!-- Sales Table -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-receipt"></i> Recent Sales</h3>
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search sales..." id="searchSales">
+                        </div>
+                    </div>
+                    <div class="products-table-container">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    {% comment %} <th><!--Customer--></th>  {% endcomment %}
+                                    <th>Items</th>
+                                    <th>Total Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Cashier</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%if sales%}
+                                {% for sale in sales %}
+                                <tr>
+                                    <td class="invoice-cell">
+                                        <div style="font-weight: 600;">INV-2024-025</div>
+                                        <button class="btn-icon small" onclick="toggleDetails('details1')">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </td>
+                                    {% comment %} <td> {% endcomment %}
+                                        {% comment %} <div style="font-weight: 600;">Rahul Verma</div>
+                                        <div style="font-size: 12px; color: var(--gray-600);">rahul@email.com</div> {% endcomment %}
+                                    {% comment %} </td> {% endcomment %}
+                                    <td>{{sale.item}} items</td>
+                                    <td class="price-cell">Rs{{sale.price}}</td>
+                                    <td>
+                                        <span class="payment-method payment-card">
+                                            <i class="fas fa-credit-card"></i> {{sale.pay_method}}
+                                        </span>
+                                    </td>
+                                    <td>Sunita</td>
+                                    <td>{{time}}</td>
+                                    <td><span class="status-badge status-active">Completed</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn-icon" onclick="viewInvoice('INV-2024-025')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon" onclick="printInvoice('INV-2024-025')">
+                                                <i class="fas fa-print"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {%endfor%}
+                                {%else%}
+                                <p>Error</p>
+                                {%endif%}
+                               
+
+                                <!-- Transaction Details (Hidden by default) -->
+                                <tr id="details1" class="details-row">
+                                    <td colspan="9">
+                                        <div class="transaction-details">
+                                            <div class="detail-row">
+                                                <span>Smartphone X1</span>
+                                                <span>1 × RS15,000 = RS15,000</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span>Wireless Headphones</span>
+                                                <span>2 × RS5,000 = RS10,000</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span>Subtotal</span>
+                                                <span>RS25,000</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span>Tax (18%)</span>
+                                                <span>RS4,500</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span><strong>Total</strong></span>
+                                                <span><strong>RS29,500</strong></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="invoice-cell">
+                                        <div style="font-weight: 600;">INV-2024-024</div>
+                                        <button class="btn-icon small" onclick="toggleDetails('details2')">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600;">Priya Sharma</div>
+                                        <div style="font-size: 12px; color: var(--gray-600);">Walk-in Customer</div>
+                                    </td>
+                                    <td>5 items</td>
+                                    <td class="price-cell">RS14,750</td>
+                                    <td>
+                                        <span class="payment-method payment-cash">
+                                            <i class="fas fa-money-bill"></i> Cash
+                                        </span>
+                                    </td>
+                                    <td>Rajesh</td>
+                                    <td>11:15 AM</td>
+                                    <td><span class="status-badge status-active">Completed</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn-icon">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon">
+                                                <i class="fas fa-print"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr id="details2" class="details-row">
+                                    <td colspan="9">
+                                        <div class="transaction-details">
+                                            <!-- Details for this invoice -->
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="invoice-cell">
+                                        <div style="font-weight: 600;">INV-2024-023</div>
+                                        <button class="btn-icon small" onclick="toggleDetails('details3')">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600;">Ajay Kumar</div>
+                                        <div style="font-size: 12px; color: var(--gray-600);">ajay@email.com</div>
+                                    </td>
+                                    <td>15 items</td>
+                                    <td class="price-cell">RS9,971</td>
+                                    <td>
+                                        <span class="payment-method payment-wallet">
+                                            <i class="fas fa-wallet"></i> UPI
+                                        </span>
+                                    </td>
+                                    <td>Sunita</td>
+                                    <td>12:45 PM</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn-icon">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon">
+                                                <i class="fas fa-print"></i>
+                                            </button>
+                                            <button class="btn-icon">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr id="details3" class="details-row">
+                                    <td colspan="9">
+                                        <div class="transaction-details">
+                                            <!-- Details for this invoice -->
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div style="font-weight: 600;">INV-2024-022</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600;">Neha Singh</div>
+                                        <div style="font-size: 12px; color: var(--gray-600);">Walk-in Customer</div>
+                                    </td>
+                                    <td>2 items</td>
+                                    <td class="price-cell">RS8,500</td>
+                                    <td>
+                                        <span class="payment-method payment-cash">
+                                            <i class="fas fa-money-bill"></i> Cash
+                                        </span>
+                                    </td>
+                                    <td>Rajesh</td>
+                                    <td>Yesterday</td>
+                                    <td>
+                                        <span class="return-badge">
+                                            <i class="fas fa-exchange-alt"></i> Returned
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn-icon">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <button class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-grid" style="margin-top: 30px;">
+                    <a href="#" class="action-card" onclick="processReturn()">
+                        <div class="action-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="action-title">Process Return</div>
+                        <div class="action-desc">Handle customer returns</div>
+                    </a>
+
+                    <a href="sales-reports.html" class="action-card">
+                        <div class="action-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="action-title">Sales Report</div>
+                        <div class="action-desc">Generate sales report</div>
+                    </a>
+
+                    <a href="#" class="action-card" onclick="voidTransaction()">
+                        <div class="action-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <div class="action-title">Void Transaction</div>
+                        <div class="action-desc">Cancel sales transaction</div>
+                    </a>
+
+                    <a href="#" class="action-card" onclick="exportSalesData()">
+                        <div class="action-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <div class="action-title">Export Sales</div>
+                        <div class="action-desc">Export sales data</div>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.admin-sidebar').classList.toggle('active');
+        }
+
+        function startNewSale() {
+            alert('Opening POS interface for new sale...');
+            // In real app, this would open POS interface
+        }
+
+        function viewInvoice(invoiceNo) {
+            alert('Viewing invoice: ' + invoiceNo);
+        }
+
+        function printInvoice(invoiceNo) {
+            alert('Printing invoice: ' + invoiceNo);
+        }
+
+        function processReturn() {
+            alert('Opening return processing interface...');
+        }
+
+        function voidTransaction() {
+            if (confirm('Are you sure you want to void this transaction?')) {
+                alert('Transaction voided successfully');
+            }
+        }
+
+        function exportSalesData() {
+            alert('Exporting sales data...');
+        }
+
+        function toggleDetails(detailsId) {
+            const detailsRow = document.getElementById(detailsId);
+            const detailsDiv = detailsRow.querySelector('.transaction-details');
+            const button = event.currentTarget;
+            
+            if (detailsDiv.classList.contains('active')) {
+                detailsDiv.classList.remove('active');
+                button.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            } else {
+                detailsDiv.classList.add('active');
+                button.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            }
+        }
+
+        // Date range buttons
+        document.querySelectorAll('.date-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Update sales data based on selected date range
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchSales').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.products-table tbody tr:not(.details-row)');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+                
+                // Also hide/show corresponding details row
+                const detailsRow = row.nextElementSibling;
+                if (detailsRow && detailsRow.classList.contains('details-row')) {
+                    detailsRow.style.display = text.includes(searchTerm) ? '' : 'none';
+                }
+            });
+        });
+
+        // Hide all details rows by default
+        document.querySelectorAll('.details-row').forEach(row => {
+            row.style.display = 'none';
+        });
+
+        // Add CSS for invoice cell
+        const style = document.createElement('style');
+        style.textContent = `
+            .invoice-cell {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .details-row {
+                background: var(--gray-50);
+            }
+            
+            .status-pending {
+                background: rgba(245, 158, 11, 0.1);
+                color: var(--warning);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+{%endblock%}

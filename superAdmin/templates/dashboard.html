@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{%block content%}
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-left">
+                <h1>Dashboard Overview</h1>
+                <p>Welcome back! Here's what's happening today.</p>
+            </div>
+            <div class="top-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="date-display">
+                    <i class="fas fa-calendar"></i>
+                    <span>Jan 25, 2026</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Today's Revenue</h3>
+                    <h2>RS {{revenue}}</h2>
+                    <p class="positive">+12.5% from yesterday</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon orders">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Orders</h3>
+                    <h2>2,847</h2>
+                    <p class="positive">+8.2% from yesterday</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon shops">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Active Shops</h3>
+                    <h2>{{active}}</h2>
+                    <p>{{inactive}} shops offline</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon customers">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Customers</h3>
+                    <h2>8,542</h2>
+                    <p class="positive">+245 today</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="content-row">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Transactions</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Shop</th>
+                                <th>Amount</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>INV-2024-001</td>
+                                <td>Electro World</td>
+                                <td><strong>RS 24,500</strong></td>
+                                <td>10:30 AM</td>
+                                <td><span class="status-badge completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>INV-2024-002</td>
+                                <td>Fashion Hub</td>
+                                <td><strong>RS 8,750</strong></td>
+                                <td>11:15 AM</td>
+                                <td><span class="status-badge completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>INV-2024-003</td>
+                                <td>Fresh Mart</td>
+                                <td><strong>RS 12,340</strong></td>
+                                <td>12:45 PM</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>INV-2024-004</td>
+                                <td>Electro World</td>
+                                <td><strong>RS 56,800</strong></td>
+                                <td>2:30 PM</td>
+                                <td><span class="status-badge completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>INV-2024-005</td>
+                                <td>Fashion Hub</td>
+                                <td><strong>RS 5,600</strong></td>
+                                <td>3:15 PM</td>
+                                <td><span class="status-badge completed">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Top Performing Shops</h3>
+                    <a href="/shop" class="view-all">Manage Shops</a>
+                </div>
+                <div class="shops-list">
+                    <div class="shop-item">
+                        <div class="shop-icon electronics">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <div class="shop-info">
+                            <h4>Electro World</h4>
+                            <p>Electronics</p>
+                        </div>
+                        <div class="shop-revenue">RS 2,45,000</div>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-icon grocery">
+                            <i class="fas fa-shopping-basket"></i>
+                        </div>
+                        <div class="shop-info">
+                            <h4>Fresh Mart</h4>
+                            <p>Grocery</p>
+                        </div>
+                        <div class="shop-revenue">RS 1,89,500</div>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-icon clothing">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="shop-info">
+                            <h4>Fashion Hub</h4>
+                            <p>Clothing</p>
+                        </div>
+                        <div class="shop-revenue">RS 1,56,800</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h3>Quick Actions</h3>
+            <div class="actions-grid">
+                <a href="/shop" class="action-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Add New Shop</span>
+                </a>
+                <a href="/report" class="action-btn">
+                    <i class="fas fa-file-export"></i>
+                    <span>Export Reports</span>
+                </a>
+                <a href="/user" class="action-btn">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Add User</span>
+                </a>
+                {% comment %} <a href="#" class="action-btn">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>View Analytics</span>
+                </a> {% endcomment %}
+            </div>
+        </div>
+
+        <!-- Footer -->
+ 
+
+    <script>
+        // Simple mobile menu toggle only
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+    </script>
+{%endblock%}
