@@ -229,17 +229,7 @@ http://127.0.0.1:8000
 
 ---
 
-## 📸 Screenshots
 
-Add screenshots of:
-
-* SuperAdmin Dashboard
-* ShopAdmin Dashboard
-* Cashier Dashboard
-* Billing Page
-* Reports Page
-
----
 
 ## 👨‍💻 Author
 
